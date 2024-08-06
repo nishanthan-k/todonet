@@ -32,8 +32,7 @@ export const addToDo = async (req, res) => {
 }
 
 export const getToDo = async (req, res) => {
-  const { user_id } = req.body;
-  console.log(user_id);
+  const { user_id } = req.query;
 
   res.status(200).json({message: `Got get call for user ${user_id}`})
 }
