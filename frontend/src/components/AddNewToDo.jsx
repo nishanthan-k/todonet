@@ -2,6 +2,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import useSetLocalStorage from "../hooks/useSetLocalStorage";
 import { toDoList } from "../store/atoms/todo.atom";
+import axiosInstance from "../utils/api/axiosInstance";
+import { todo } from "../utils/api/apiurls";
 
 function AddNewToDo() {
   const [newToDo, setNewToDo] = useState('');
@@ -13,19 +15,19 @@ function AddNewToDo() {
     inputRef.current.focus();
   }, [])
 
-  const handleSetToDo = useCallback(() => {
-    const currToDo = {
-      task: newToDo,
-      id: toDo.length ? toDo[toDo.length - 1].id + 1 : 0,
-      isCompleted: false,
+  const handleAddToDo = async () => {
+    try {
+      const response = await axiosInstance.post(todo.addToDoApi, { task: newToDo });
+      
+      if (response.status >= 200 && response.status < 300) {
+        console.log('Todo added successfully');
+      } else {
+        console.log('Error in adding todo');
+      }
+    } catch (error) {
+      console.error('Error during API call:', error);
     }
-
-    const updatedToDos = [...toDo, currToDo]
-    setLS('todos', updatedToDos);
-    setToDo(updatedToDos)
-    setNewToDo('')
-    inputRef.current.focus();
-  }, [toDo, newToDo, setToDo, setNewToDo, setLS])
+  }
 
   return (
     <div className="w-full flex justify-between gap-4 h-fit">
@@ -39,7 +41,7 @@ function AddNewToDo() {
       />
       <button
         className={`bg-blue-400 px-6 py-0.5 rounded-md ${!newToDo ? 'cursor-not-allowed bg-sky-900' : 'hover:bg-sky-600'}`}
-        onClick={handleSetToDo}
+        onClick={handleAddToDo}
         disabled={!newToDo}
       >
         Add
