@@ -7,7 +7,8 @@ const port = import.meta.env.VITE_SERVER_PORT;
 const axiosInstance = axios.create({
   baseURL: `${protocol}://${host}:${port}`,
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    'Cache-Control': 'no-cache'
   },
 })
 
