@@ -17,8 +17,8 @@ function AddNewToDo() {
     const currToDo = {
       todo_id: totalToDo[0].todo_id + 1,
       task: newToDo,
-      completed: false,
-      deleted: false,
+      isCompleted: false,
+      isDeleted: false,
     }
     setTotalToDo((prev) => [currToDo, ...prev])
     setNewToDo('')

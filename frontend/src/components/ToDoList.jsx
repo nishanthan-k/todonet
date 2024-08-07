@@ -38,7 +38,7 @@ function ToDoList() {
     console.log(todo_id)
     const t = todos.map(e => {
       if (e.todo_id === todo_id) {
-        return {...e, completed: !e.completed }
+        return {...e, isCompleted: !e.isCompleted }
       } else {
         return e
       }

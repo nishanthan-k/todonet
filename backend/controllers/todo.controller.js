@@ -38,7 +38,7 @@ export const getRecentToDo = async (req, res) => {
 
   try {
     const q = `
-      SELECT t.todo_id, t.task, t.createdAt, t.completed, t.deleted
+      SELECT t.todo_id, t.task, t.createdAt, t.isCompleted, t.isDeleted
       FROM todos t 
       JOIN users u ON t.user_id = u.user_id
       WHERE t.user_id = ($1)
@@ -75,10 +75,10 @@ export const getToDo = async (req, res) => {
   
   try {
     const q = `
-      SELECT t.todo_id, t.task, t.createdAt, t.completed, t.deleted
+      SELECT t.todo_id, t.task, t.createdAt, t.isCompleted, t.isDeleted
       FROM todos t 
       JOIN users u ON t.user_id = u.user_id
-      WHERE t.user_id = ($1) AND deleted = false
+      WHERE t.user_id = ($1) AND isDeleted = false
       ORDER BY t.createdAt DESC
     `;
 
@@ -116,7 +116,7 @@ export const completeToDo = async (req, res) => {
   try {
     const q = `
       UPDATE todos
-      SET completed = NOT completed
+      SET isCompleted = NOT isCompleted
       WHERE user_id = ($1) AND todo_id = ($2)
     `;
 
@@ -149,7 +149,7 @@ export const deleteToDo = async (req, res) => {
   try {
     const q = `
       UPDATE todos
-      SET deleted = NOT deleted
+      SET isDeleted = NOT isDeleted
       WHERE user_id = ($1) AND todo_id = ($2)
     `;
 

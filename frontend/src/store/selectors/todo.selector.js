@@ -6,11 +6,11 @@ export const sortedToDos = selector({
   get: ({ get }) => {
     const todos = get(toDoList);
 
-    const notCompletedToDos = [...todos].filter((todo) => !todo.isCompleted);
-    const completedToDos = [...todos].filter((todo) => todo.isCompleted);
+    const notisCompletedToDos = [...todos].filter((todo) => !todo.isisCompleted);
+    const isCompletedToDos = [...todos].filter((todo) => todo.isisCompleted);
 
-    completedToDos.sort((a, b) => (a.completedId || 0) - (b.completedId || 0));
+    isCompletedToDos.sort((a, b) => (a.isCompletedId || 0) - (b.isCompletedId || 0));
 
-    return [...notCompletedToDos, ...completedToDos];
+    return [...notisCompletedToDos, ...isCompletedToDos];
   },
 });
