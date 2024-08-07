@@ -8,21 +8,24 @@ function AddNewToDo() {
   const [newToDo, setNewToDo] = useState('');
   const setTotalToDo = useSetRecoilState(toDoList);
   const inputRef = useRef(null);
+  const [watingForResp, setWaitingForResp] = useState(false);
 
   useEffect(() => {
     inputRef.current.focus();
   }, [newToDo])
 
   const handleAddToDo = async () => {
+    setWaitingForResp(true);
+
     try {
       const response = await axiosInstance.post(todo.addToDoApi, { task: newToDo });
       
       if (response.status >= 200 && response.status < 300) {
         console.log('Todo added successfully');
-        setNewToDo('');
         const { estatus, todo } = response.data;
-
+      
         if (estatus) {
+          setWaitingForResp(false);
           setTotalToDo((prev) => [todo[0], ...prev])
         }
       } else {
@@ -44,9 +47,9 @@ function AddNewToDo() {
         onChange={(e) => setNewToDo(e.target.value)}
       />
       <button
-        className={`bg-blue-400 px-6 py-0.5 rounded-md ${!newToDo ? 'cursor-not-allowed bg-sky-900' : 'hover:bg-sky-600'}`}
+        className={`bg-blue-400 px-6 py-0.5 rounded-md ${(!newToDo || watingForResp) ? 'cursor-not-allowed bg-sky-900' : 'hover:bg-sky-600'}`}
         onClick={handleAddToDo}
-        disabled={!newToDo}
+        disabled={!newToDo || watingForResp}
       >
         Add
       </button>
