@@ -1,33 +1,38 @@
 import { useEffect, useRef, useState } from "react";
 import { todo } from "../utils/api/apiurls";
 import axiosInstance from "../utils/api/axiosInstance";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { toDoList } from "../store/atoms/todo.atom";
 
 function AddNewToDo() {
   const [newToDo, setNewToDo] = useState('');
-  const setTotalToDo = useSetRecoilState(toDoList);
+  const [totalToDo, setTotalToDo] = useRecoilState(toDoList);
   const inputRef = useRef(null);
-  const [watingForResp, setWaitingForResp] = useState(false);
 
   useEffect(() => {
     inputRef.current.focus();
   }, [newToDo])
 
   const handleAddToDo = async () => {
-    setWaitingForResp(true);
+    const currToDo = {
+      todo_id: totalToDo[0].todo_id + 1,
+      task: newToDo,
+      completed: false,
+      deleted: false,
+    }
+    setTotalToDo((prev) => [currToDo, ...prev])
+    setNewToDo('')
     try {
       const response = await axiosInstance.post(todo.addToDoApi, { task: newToDo });
       
       if (response.status >= 200 && response.status < 300) {
         console.log('Todo added successfully');
-        const { estatus, todo } = response.data;
+        // const { estatus, todo } = response.data;
         
-        if (estatus) {
-          setNewToDo('')
-          setWaitingForResp(false);
-          setTotalToDo((prev) => [todo[0], ...prev])
-        }
+        // if (estatus) {
+        //   setWaitingForResp(false);
+        //   // setTotalToDo((prev) => [todo[0], ...prev])
+        // }
       } else {
         console.log('Error in adding todo');
       }
@@ -47,9 +52,9 @@ function AddNewToDo() {
         onChange={(e) => setNewToDo(e.target.value)}
       />
       <button
-        className={`bg-blue-400 px-6 py-0.5 rounded-md ${(!newToDo || watingForResp) ? 'cursor-not-allowed bg-sky-900' : 'hover:bg-sky-600'}`}
+        className={`bg-blue-400 px-6 py-0.5 rounded-md ${!newToDo ? 'cursor-not-allowed bg-sky-900' : 'hover:bg-sky-600'}`}
         onClick={handleAddToDo}
-        disabled={!newToDo || watingForResp}
+        disabled={!newToDo}
       >
         Add
       </button>
