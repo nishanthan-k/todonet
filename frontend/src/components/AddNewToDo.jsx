@@ -1,19 +1,17 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useRecoilState } from "recoil";
-import useSetLocalStorage from "../hooks/useSetLocalStorage";
-import { toDoList } from "../store/atoms/todo.atom";
-import axiosInstance from "../utils/api/axiosInstance";
+import { useEffect, useRef, useState } from "react";
 import { todo } from "../utils/api/apiurls";
+import axiosInstance from "../utils/api/axiosInstance";
+import { useSetRecoilState } from "recoil";
+import { toDoList } from "../store/atoms/todo.atom";
 
 function AddNewToDo() {
   const [newToDo, setNewToDo] = useState('');
-  const [toDo, setToDo] = useRecoilState(toDoList);
-  const setLS = useSetLocalStorage();
+  const setTotalToDo = useSetRecoilState(toDoList);
   const inputRef = useRef(null);
 
   useEffect(() => {
     inputRef.current.focus();
-  }, [])
+  }, [newToDo])
 
   const handleAddToDo = async () => {
     try {
@@ -21,6 +19,12 @@ function AddNewToDo() {
       
       if (response.status >= 200 && response.status < 300) {
         console.log('Todo added successfully');
+        setNewToDo('');
+        const { estatus, todo } = response.data;
+
+        if (estatus) {
+          setTotalToDo((prev) => [todo[0], ...prev])
+        }
       } else {
         console.log('Error in adding todo');
       }
