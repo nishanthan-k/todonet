@@ -11,6 +11,27 @@ function ToDoList() {
   const [todos, setToDos] = useRecoilState(toDoList);
   const [isLoading, setIsLoading] = useState(true);
 
+  const handleCompleteToDo = async (todo_id) => {
+    try {
+      const req = await axiosInstance.post(todo.completeToDoApi, { todo_id });
+
+      if (req.status >= 200 && req.status <= 300) {
+        const { estatus, todos } = req.data;
+
+        if (estatus) {
+          setToDos(todos);
+          setIsLoading(false);
+        } else {
+          console.log('Check completeToDo response');
+          setIsLoading(false);
+        }
+      }
+    } catch (error) {
+      console.log('Error in completeToDo');
+      setIsLoading(false);
+    }
+  }
+
   const getToDos = async () => {
     try {
       const req = await axiosInstance.get(todo.getToDoApi);
@@ -49,6 +70,7 @@ function ToDoList() {
                 <ToDoCard
                   key={i}
                   todo={todo}
+                  handleCompleteToDo={handleCompleteToDo}
                 />
               ))
             ) : (

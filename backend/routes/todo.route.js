@@ -1,9 +1,10 @@
 import { Router } from 'express';
-import { addToDo, getToDo } from '../controllers/todo.controller.js';
+import { addToDo, completeToDo, getToDo } from '../controllers/todo.controller.js';
 
 const router = Router();
 
 router.post('/addToDo', addToDo);
 router.get('/getToDo', getToDo);
+router.post('/completeToDo', completeToDo);
 
 export default router;

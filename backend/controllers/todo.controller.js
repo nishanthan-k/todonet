@@ -107,6 +107,35 @@ export const getToDo = async (req, res) => {
   } 
 }
 
-// export const completeToDo = async (req, res) => {
-//   const 
-// }
+export const completeToDo = async (req, res) => {
+  console.log('reached complete');
+  const { user_id } = req.query;
+  const { todo_id } = req.body;
+  const client = await connectDB.connect();
+
+  if (!user_id) {
+    res.status(400).json({estatus: false, message: 'user_id is required'});
+  }
+
+  try {
+    const q = `
+      UPDATE todos
+      SET completed = NOT completed
+      WHERE user_id = ($1) AND todo_id = ($2)
+    `;
+
+    const values = [user_id, todo_id];
+
+    const result = await client.query(q, values);
+
+    await getToDo(req, res);
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      status: false,
+      message: 'Internal server error'
+    })
+  } finally {
+    client.release();
+  }
+}

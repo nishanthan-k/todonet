@@ -8,8 +8,8 @@ import PropTypes from "prop-types";
 function ToDoCard(props) {
   const {
     todo: { task, todo_id: id, completed: isCompleted },
+    handleCompleteToDo,
     handleDeleteTask = {},
-    handleTaskCheck = {},
   } = props;
 
   return (
@@ -21,12 +21,12 @@ function ToDoCard(props) {
       {isCompleted ? (
         <MdOutlineCheckCircleOutline
           className="cursor-pointer checkCircleHoverEffect"
-          onClick={() => handleTaskCheck(id)}
+          onClick={() => handleCompleteToDo(id)}
         />
       ) : (
         <MdOutlineRadioButtonUnchecked
           className="cursor-pointer checkCircleHoverEffect"
-          onClick={() => handleTaskCheck(id)}
+          onClick={() => handleCompleteToDo(id)}
         />
       )}
       <p className="overflow-auto mb:max-w-52 sm:max-w-96 ">{task}</p>
@@ -46,7 +46,7 @@ ToDoCard.propTypes = {
   todo: PropTypes.object.isRequired,
   task: PropTypes.string,
   handleDeleteTask: PropTypes.func,
-  handleTaskCheck: PropTypes.func,  
+  handleCompleteToDo: PropTypes.func.isRequired,  
 };
 
 export default ToDoCard;
