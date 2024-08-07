@@ -1,9 +1,9 @@
 import { connectDB } from "../config/db.js";
 
 export const addToDo = async (req, res) => {
-  console.log(req.body)
-  const { user_id, task } = req.body;
-  console.log('reached');
+  const { user_id } = req.query;
+  const { task } = req.body;
+  console.log('reached', user_id);
   const client = await connectDB.connect();
 
   if (!user_id || !task) {
@@ -33,6 +33,7 @@ export const addToDo = async (req, res) => {
 
 export const getToDo = async (req, res) => {
   const { user_id } = req.query;
+  console.log('userid', user_id)
   const client = await connectDB.connect();
 
   if (!user_id) {
@@ -45,6 +46,7 @@ export const getToDo = async (req, res) => {
       FROM todos t 
       JOIN users u ON t.user_id = u.user_id
       WHERE t.user_id = ($1)
+      ORDER BY t.createdAt DESC
     `;
 
     const result = await client.query(q, [user_id]);
@@ -65,3 +67,7 @@ export const getToDo = async (req, res) => {
     client.release();
   } 
 }
+
+// export const completeToDo = async (req, res) => {
+//   const 
+// }

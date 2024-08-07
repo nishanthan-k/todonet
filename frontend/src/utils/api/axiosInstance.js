@@ -14,15 +14,8 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    if (["POST", "PUT", "PATCH"].includes(config.method.toUpperCase())) {
-      config.data = config.data || {};
-      config.data.user_id = 1;
-    }
-
-    if (config.method.toUpperCase() === "GET") {
-      config.params = config.params || {};
-      config.params.user_id = 1;
-    }
+    config.params = config.params || {};
+    config.params.user_id = 1;
 
     return config;
   },
