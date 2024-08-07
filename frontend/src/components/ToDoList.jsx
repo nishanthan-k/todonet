@@ -9,47 +9,28 @@ import { useEffect, useState } from 'react';
 import axiosInstance from '../utils/api/axiosInstance';
 import { todo } from '../utils/api/apiurls';
 
-function ToDoList({ loading }) {
-  const [toDosLoadable, setToDosTemp] = useRecoilStateLoadable(toDoList);
-  const sortedToDo = useRecoilValue(sortedToDos);
-  const setLS = useSetLocalStorage();
+function ToDoList() {
   const [todos, setToDos] = useState([]);
-
-  // const handleDeleteTask = (id) => {
-  //   const updatedToDos = toDosLoadable.contents.filter(
-  //     (todo) => todo.id !== id
-  //   );
-  //   setToDos(updatedToDos);
-  //   setLS("todos", updatedToDos);
-  // };
-
-  // const handleTaskCheck = (id) => {
-  //   const updatedToDos = toDosLoadable.contents.map((todo) =>
-  //     todo.id === id
-  //       ? {
-  //         ...todo,
-  //         isCompleted: !todo.isCompleted,
-  //         completedId: !todo.isCompleted
-  //           ? toDosLoadable.contents.filter((n) => n?.completedId).length + 1
-  //           : null,
-  //       }
-  //       : todo
-  //   );
-
-  //   setToDos(updatedToDos);
-  //   setLS("todos", updatedToDos);
-  // };
+  const [isLoading, setIsLoading] = useState(true);
 
   const getToDos = async () => {
     try {
       const req = await axiosInstance.get(todo.getToDoApi);
 
       if (req.status >= 200 && req.status <= 300) {
-        console.log('Todo fetched');
+        const { estatus, todos } = req.data;
+        if (estatus) {
+          setToDos(todos);
+          setIsLoading(false);
+        } else {
+          setIsLoading(false);
+        }
       } else {
+        setIsLoading(false);
         console.log('Error in fetching todos');
       }
     } catch (error) {
+      setIsLoading(false);
       console.error(error);
     }
   }
@@ -58,17 +39,15 @@ function ToDoList({ loading }) {
     getToDos();
   }, [])
 
-  return loading ? (
+  return isLoading ? (
     <Loader />
   ) : (
     <section className="grid grid-cols-1 gap-2">
-      {sortedToDo.length > 0 ? (
-        sortedToDo.map((todo, i) => (
+      {todos.length > 0 ? (
+        todos.map((todo, i) => (
           <ToDoCard
             key={i}
             todo={todo}
-            handleDeleteTask={handleDeleteTask}
-            handleTaskCheck={handleTaskCheck}
           />
         ))
       ) : (

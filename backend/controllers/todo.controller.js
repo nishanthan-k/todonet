@@ -33,6 +33,35 @@ export const addToDo = async (req, res) => {
 
 export const getToDo = async (req, res) => {
   const { user_id } = req.query;
+  const client = await connectDB.connect();
 
-  res.status(200).json({message: `Got get call for user ${user_id}`})
+  if (!user_id) {
+    res.status(400).json({message: 'User ID is required'});
+  }
+  
+  try {
+    const q = `
+      SELECT t.todo_id, t.task, t.createdAt, t.completed, t.deleted
+      FROM todos t 
+      JOIN users u ON t.user_id = u.user_id
+      WHERE t.user_id = ($1)
+    `;
+
+    const result = await client.query(q, [user_id]);
+
+    res.status(200).json({
+      estatus: true,
+      message: 'ToDo fetched successfully',
+      todos: result.rows
+    })
+
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      status: false,
+      message: 'Internal server error'
+    })
+  } finally {
+    client.release();
+  } 
 }

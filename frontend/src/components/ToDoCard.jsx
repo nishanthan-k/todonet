@@ -7,9 +7,9 @@ import PropTypes from "prop-types";
 
 function ToDoCard(props) {
   const {
-    todo: { task, id, isCompleted },
-    handleDeleteTask,
-    handleTaskCheck,
+    todo: { task, todo_id: id, completed: isCompleted },
+    handleDeleteTask = {},
+    handleTaskCheck = {},
   } = props;
 
   return (
@@ -45,8 +45,8 @@ function ToDoCard(props) {
 ToDoCard.propTypes = {
   todo: PropTypes.object.isRequired,
   task: PropTypes.string,
-  handleDeleteTask: PropTypes.func.isRequired,
-  handleTaskCheck: PropTypes.func.isRequired,  
+  handleDeleteTask: PropTypes.func,
+  handleTaskCheck: PropTypes.func,  
 };
 
 export default ToDoCard;
