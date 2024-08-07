@@ -9,7 +9,8 @@ function ToDoCard(props) {
   const {
     todo: { task, todo_id: id, completed: isCompleted },
     handleCompleteToDo,
-    handleDeleteTask = {},
+    handleDeleteToDo,
+    currDisBtn
   } = props;
 
   return (
@@ -21,12 +22,12 @@ function ToDoCard(props) {
       {isCompleted ? (
         <MdOutlineCheckCircleOutline
           className="cursor-pointer checkCircleHoverEffect"
-          onClick={() => handleCompleteToDo(id)}
+          onClick={() => currDisBtn !== 'completeBtn' && handleCompleteToDo(id)}
         />
       ) : (
         <MdOutlineRadioButtonUnchecked
           className="cursor-pointer checkCircleHoverEffect"
-          onClick={() => handleCompleteToDo(id)}
+          onClick={() => currDisBtn !== 'completeBtn' && handleCompleteToDo(id)}
         />
       )}
       <p className="overflow-auto mb:max-w-52 sm:max-w-96 ">{task}</p>
@@ -36,7 +37,7 @@ function ToDoCard(props) {
             ? "cursor-pointer trashHoverEffect hover:text-red-500"
             : "cursor-default"
         }`}
-        onClick={() => handleDeleteTask(id)}
+        onClick={() => currDisBtn !== 'deleteBtn' && handleDeleteToDo(id)}
       />
     </div>
   );
@@ -45,8 +46,9 @@ function ToDoCard(props) {
 ToDoCard.propTypes = {
   todo: PropTypes.object.isRequired,
   task: PropTypes.string,
-  handleDeleteTask: PropTypes.func,
   handleCompleteToDo: PropTypes.func.isRequired,  
+  handleDeleteToDo: PropTypes.func.isRequired,
+  currDisBtn: PropTypes.string.isRequired
 };
 
 export default ToDoCard;

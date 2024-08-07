@@ -10,8 +10,35 @@ import { toDoList } from '../store/atoms/todo.atom';
 function ToDoList() {
   const [todos, setToDos] = useRecoilState(toDoList);
   const [isLoading, setIsLoading] = useState(true);
+  const [currDisBtn, setCurrDisBtn] = useState('');
+
+  const handleDeleteToDo = async (todo_id) => {
+    console.log(todo_id)
+    setCurrDisBtn('deleteBtn');
+    try {
+      const req = await axiosInstance.post(todo.deleteToDoApi, { todo_id });
+
+      if (req.status >= 200 && req.status <= 300) {
+        const { estatus, todos } = req.data;
+        if (estatus) {
+          setToDos(todos);
+          setIsLoading(false);
+          setCurrDisBtn('');
+        } else {
+          console.log('Check deleteToDo response');
+          setIsLoading(false);
+          setCurrDisBtn('');
+        }
+      }
+    } catch (error) {
+      console.log('Error in deleteToDo');
+      setIsLoading(false);
+    }
+  }
 
   const handleCompleteToDo = async (todo_id) => {
+    console.log(todo_id)
+    setCurrDisBtn('completeBtn');
     try {
       const req = await axiosInstance.post(todo.completeToDoApi, { todo_id });
 
@@ -21,9 +48,11 @@ function ToDoList() {
         if (estatus) {
           setToDos(todos);
           setIsLoading(false);
+          setCurrDisBtn('');
         } else {
           console.log('Check completeToDo response');
           setIsLoading(false);
+          setCurrDisBtn('');
         }
       }
     } catch (error) {
@@ -71,6 +100,8 @@ function ToDoList() {
                   key={i}
                   todo={todo}
                   handleCompleteToDo={handleCompleteToDo}
+                  handleDeleteToDo={handleDeleteToDo}
+                  currDisBtn={currDisBtn}
                 />
               ))
             ) : (

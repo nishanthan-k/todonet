@@ -82,7 +82,7 @@ export const getToDo = async (req, res) => {
       SELECT t.todo_id, t.task, t.createdAt, t.completed, t.deleted
       FROM todos t 
       JOIN users u ON t.user_id = u.user_id
-      WHERE t.user_id = ($1)
+      WHERE t.user_id = ($1) AND deleted = false
       ORDER BY t.createdAt DESC
     `;
 
@@ -133,6 +133,34 @@ export const completeToDo = async (req, res) => {
     console.log(error)
     res.status(500).json({
       status: false,
+      message: 'Internal server error'
+    })
+  } finally {
+    client.release();
+  }
+}
+
+export const deleteToDo = async (req, res) => {
+  const { user_id } = req.query;
+  const { todo_id } = req.body;
+  const client = await connectDB.connect();
+
+  try {
+    const q = `
+      UPDATE todos
+      SET deleted = NOT deleted
+      WHERE user_id = ($1) AND todo_id = ($2)
+    `;
+
+    const values = [user_id, todo_id];
+
+    const result = await client.query(q, values);
+
+    await getToDo(req, res);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      estatus: false,
       message: 'Internal server error'
     })
   } finally {
