@@ -19,10 +19,6 @@ export const addToDo = async (req, res) => {
 
     const result = await client.query(q, values);
 
-    // res.status(200).json({
-    //   message: 'ToDo added successfully',
-    //   todo: result.rows,
-    // })
     await getRecentToDo(req, res);
   } catch (error) {
     res.status(500).json({message: 'Internal server error 1'})
@@ -128,7 +124,12 @@ export const completeToDo = async (req, res) => {
 
     const result = await client.query(q, values);
 
-    await getToDo(req, res);
+    res.status(200).json({
+      estatus: true,
+      message: 'Todo updated for complete task'
+    })
+
+    // await getToDo(req, res);
   } catch (error) {
     console.log(error)
     res.status(500).json({
@@ -156,7 +157,11 @@ export const deleteToDo = async (req, res) => {
 
     const result = await client.query(q, values);
 
-    await getToDo(req, res);
+    // await getToDo(req, res);
+    res.status(200).json({
+      estatus: true,
+      message: 'Todo updated for delete task'
+    })
   } catch (error) {
     console.log(error);
     res.status(500).json({

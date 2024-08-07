@@ -16,15 +16,15 @@ function AddNewToDo() {
 
   const handleAddToDo = async () => {
     setWaitingForResp(true);
-
     try {
       const response = await axiosInstance.post(todo.addToDoApi, { task: newToDo });
       
       if (response.status >= 200 && response.status < 300) {
         console.log('Todo added successfully');
         const { estatus, todo } = response.data;
-      
+        
         if (estatus) {
+          setNewToDo('')
           setWaitingForResp(false);
           setTotalToDo((prev) => [todo[0], ...prev])
         }

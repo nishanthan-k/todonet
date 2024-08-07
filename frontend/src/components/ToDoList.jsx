@@ -10,24 +10,22 @@ import { toDoList } from '../store/atoms/todo.atom';
 function ToDoList() {
   const [todos, setToDos] = useRecoilState(toDoList);
   const [isLoading, setIsLoading] = useState(true);
-  const [currDisBtn, setCurrDisBtn] = useState('');
 
   const handleDeleteToDo = async (todo_id) => {
     console.log(todo_id)
-    setCurrDisBtn('deleteBtn');
+    const t = todos.filter(e => e.todo_id !== todo_id);
+    setToDos(t)
     try {
       const req = await axiosInstance.post(todo.deleteToDoApi, { todo_id });
 
       if (req.status >= 200 && req.status <= 300) {
-        const { estatus, todos } = req.data;
+        const { estatus } = req.data;
         if (estatus) {
-          setToDos(todos);
+          // setToDos(todos);
           setIsLoading(false);
-          setCurrDisBtn('');
         } else {
           console.log('Check deleteToDo response');
           setIsLoading(false);
-          setCurrDisBtn('');
         }
       }
     } catch (error) {
@@ -38,7 +36,15 @@ function ToDoList() {
 
   const handleCompleteToDo = async (todo_id) => {
     console.log(todo_id)
-    setCurrDisBtn('completeBtn');
+    const t = todos.map(e => {
+      if (e.todo_id === todo_id) {
+        return {...e, completed: !e.completed }
+      } else {
+        return e
+      }
+    })
+    setToDos(t)
+
     try {
       const req = await axiosInstance.post(todo.completeToDoApi, { todo_id });
 
@@ -46,13 +52,11 @@ function ToDoList() {
         const { estatus, todos } = req.data;
 
         if (estatus) {
-          setToDos(todos);
+          // setToDos(todos);
           setIsLoading(false);
-          setCurrDisBtn('');
         } else {
           console.log('Check completeToDo response');
           setIsLoading(false);
-          setCurrDisBtn('');
         }
       }
     } catch (error) {
@@ -101,7 +105,6 @@ function ToDoList() {
                   todo={todo}
                   handleCompleteToDo={handleCompleteToDo}
                   handleDeleteToDo={handleDeleteToDo}
-                  currDisBtn={currDisBtn}
                 />
               ))
             ) : (
