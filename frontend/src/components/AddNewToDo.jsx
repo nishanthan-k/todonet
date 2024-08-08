@@ -15,7 +15,7 @@ function AddNewToDo() {
 
   const handleAddToDo = async () => {
     const currToDo = {
-      todo_id: totalToDo[0].todo_id + 1,
+      todo_id: totalToDo.length > 0 ? totalToDo[0]?.todo_id + 1 : 1,
       task: newToDo,
       isCompleted: false,
       isDeleted: false,

@@ -6,8 +6,8 @@ export const sortedToDos = selector({
   get: ({ get }) => {
     const todos = get(toDoList);
 
-    const notisCompletedToDos = [...todos].filter((todo) => !todo.isisCompleted);
-    const isCompletedToDos = [...todos].filter((todo) => todo.isisCompleted);
+    const notisCompletedToDos = [...todos].filter((todo) => !todo.isCompleted);
+    const isCompletedToDos = [...todos].filter((todo) => todo.isCompleted);
 
     isCompletedToDos.sort((a, b) => (a.isCompletedId || 0) - (b.isCompletedId || 0));
 

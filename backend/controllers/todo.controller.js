@@ -38,11 +38,11 @@ export const getRecentToDo = async (req, res) => {
 
   try {
     const q = `
-      SELECT t.todo_id, t.task, t.createdAt, t.isCompleted, t.isDeleted
+      SELECT t.todo_id, t.task, t."createdAt", t."isCompleted", t."isDeleted"
       FROM todos t 
       JOIN users u ON t.user_id = u.user_id
       WHERE t.user_id = ($1)
-      ORDER BY t.createdAt DESC
+      ORDER BY t."createdAt" DESC
       LIMIT 1
     `
     const values = [user_id]
@@ -75,11 +75,11 @@ export const getToDo = async (req, res) => {
   
   try {
     const q = `
-      SELECT t.todo_id, t.task, t.createdAt, t.isCompleted, t.isDeleted
-      FROM todos t 
+      SELECT t.todo_id, t.task, t."isCompleted"
+      FROM todos t
       JOIN users u ON t.user_id = u.user_id
-      WHERE t.user_id = ($1) AND isDeleted = false
-      ORDER BY t.createdAt DESC
+      WHERE t.user_id = ($1) AND t."isDeleted" = false
+      ORDER BY t."createdAt" DESC
     `;
 
     const values = [user_id]
@@ -116,7 +116,7 @@ export const completeToDo = async (req, res) => {
   try {
     const q = `
       UPDATE todos
-      SET isCompleted = NOT isCompleted
+      SET "isCompleted" = NOT "isCompleted"
       WHERE user_id = ($1) AND todo_id = ($2)
     `;
 
@@ -147,9 +147,14 @@ export const deleteToDo = async (req, res) => {
   const client = await connectDB.connect();
 
   try {
+    // const q = `
+    //   UPDATE todos
+    //   SET "isDeleted" = NOT "isDeleted"
+    //   WHERE user_id = ($1) AND todo_id = ($2)
+    // `;
+
     const q = `
-      UPDATE todos
-      SET isDeleted = NOT isDeleted
+      DELETE FROM todos
       WHERE user_id = ($1) AND todo_id = ($2)
     `;
 

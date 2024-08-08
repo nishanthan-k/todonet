@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 
 function ToDoCard(props) {
   const {
-    todo: { task, todo_id: id, isCompleted: isisCompleted },
+    todo: { task, todo_id: id, isCompleted },
     handleCompleteToDo,
     handleDeleteToDo,
   } = props;
@@ -15,10 +15,10 @@ function ToDoCard(props) {
   return (
     <div
       className={`bg-slate-700 text-gray-300 grid grid-flow-col place-content-between place-items-center py-4 px-2 border-2 border-purple-700 rounded-md ${
-        isisCompleted && "line-through text-gray-500"
+        isCompleted && "line-through text-gray-500"
       }`}
     >
-      {isisCompleted ? (
+      {isCompleted ? (
         <MdOutlineCheckCircleOutline
           className="cursor-pointer checkCircleHoverEffect"
           onClick={() => handleCompleteToDo(id)}
@@ -32,7 +32,7 @@ function ToDoCard(props) {
       <p className="overflow-auto mb:max-w-52 sm:max-w-96 ">{task}</p>
       <MdDelete
         className={`text-xl ${
-          !isisCompleted
+          !isCompleted
             ? "cursor-pointer trashHoverEffect hover:text-red-500"
             : "cursor-default"
         }`}
