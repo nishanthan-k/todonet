@@ -47,7 +47,7 @@ function AddNewToDo() {
         type="text"
         alt="Create a to do..."
         ref={inputRef}
-        className="w-11/12 h-10 rounded-sm hover:ring-slate-400 hover:ring-2 focus:rounded-md outline-none focus:ring-2 focus:ring-blue-400 px-2"
+        className="w-11/12 h-10 rounded-sm hover:ring-sky-400 hover:ring-2 focus:rounded-md outline-none focus:ring-2 focus:ring-blue-400 px-2"
         value={newToDo}
         onChange={(e) => setNewToDo(e.target.value)}
       />

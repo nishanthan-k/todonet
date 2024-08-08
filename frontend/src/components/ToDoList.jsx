@@ -98,7 +98,7 @@ function ToDoList() {
           <Loader />
         ) : (
           <section className="grid grid-cols-1 gap-2">
-            {todos.length > 0 ? (
+            {todos &&todos.length > 0 ? (
               todos.map((todo, i) => (
                 <ToDoCard
                   key={i}
@@ -118,7 +118,3 @@ function ToDoList() {
 }
 
 export default ToDoList;
-
-ToDoList.propTypes = {
-  loading: PropTypes.bool.isRequired, 
-}

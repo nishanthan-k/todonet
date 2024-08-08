@@ -9,3 +9,8 @@ export const toDoList = atom({
     // { task: "four", isCompleted: true, id: 4, isCompletedId: null },
   ],
 });
+
+export const userAtom = atom({
+  key: 'userAtom',
+  default: ''
+})
