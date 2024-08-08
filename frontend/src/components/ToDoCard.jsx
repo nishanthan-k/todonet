@@ -18,26 +18,29 @@ function ToDoCard(props) {
         isCompleted && "line-through text-gray-500"
       }`}
     >
-      {isCompleted ? (
-        <MdOutlineCheckCircleOutline
-          className="cursor-pointer checkCircleHoverEffect"
-          onClick={() => handleCompleteToDo(id)}
-        />
-      ) : (
-        <MdOutlineRadioButtonUnchecked
-          className="cursor-pointer checkCircleHoverEffect"
-          onClick={() => handleCompleteToDo(id)}
-        />
-      )}
+        {isCompleted ? (
+          <button onClick={() => handleCompleteToDo(id)}>
+            <MdOutlineCheckCircleOutline
+              className="cursor-pointer checkCircleHoverEffect"
+            />
+          </button>
+        ) : (
+          <button onClick={() => handleCompleteToDo(id)}>
+            <MdOutlineRadioButtonUnchecked
+              className="cursor-pointer checkCircleHoverEffect"
+            />
+          </button>
+        )}
       <p className="overflow-auto mb:max-w-52 sm:max-w-96 ">{task}</p>
-      <MdDelete
-        className={`text-xl ${
-          !isCompleted
-            ? "cursor-pointer trashHoverEffect hover:text-red-500"
-            : "cursor-default"
-        }`}
-        onClick={() => handleDeleteToDo(id)}
-      />
+      <button onClick={() => handleDeleteToDo(id)}>
+        <MdDelete
+          className={`text-xl ${
+            !isCompleted
+              ? "cursor-pointer trashHoverEffect hover:text-red-500"
+              : "cursor-default"
+          }`}
+        />
+      </button>
     </div>
   );
 }
