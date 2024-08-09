@@ -4,3 +4,7 @@ export const todo = {
   completeToDoApi: '/api/todo/completeToDo',
   deleteToDoApi: '/api/todo/deleteToDo'
 }
+
+export const auth = {
+  loginApi: '/api/auth/login',
+}

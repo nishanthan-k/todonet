@@ -65,8 +65,8 @@ export const getRecentToDo = async (req, res) => {
 }
 
 export const getToDo = async (req, res) => {
-  const { user_id } = req.query;
-  console.log('userid', user_id)
+  const { user_id, token } = req.query;
+  console.log('userid', user_id, token)
   const client = await connectDB.connect();
 
   if (!user_id) {
