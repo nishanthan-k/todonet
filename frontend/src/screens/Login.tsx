@@ -3,9 +3,11 @@ import { useForm } from "react-hook-form";
 import axiosInstance from '../utils/api/axiosInstance';
 import { auth } from '../utils/api/apiurls';
 import { useNavigate } from 'react-router-dom';
+import useSetLocalStorage from '../hooks/useSetLocalStorage';
 
 
 export default function Login() {
+  const setLS = useSetLocalStorage();
   const navigate = useNavigate();
   const form = useForm({
     defaultValues: {
@@ -21,6 +23,8 @@ export default function Login() {
       const req = await axiosInstance.post(auth.loginApi, data);
 
       if (req.status >= 200 && req.status <= 300) {
+        const { token } = req.data;
+        setLS('token', token);
         navigate('/');
       }
     } catch (error) {
