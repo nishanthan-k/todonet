@@ -1,13 +1,13 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
-import { zodResolver } from '@hookform/resolvers/zod';
-import axiosInstance from '../utils/api/axiosInstance';
-import { auth } from '../utils/api/apiurls';
 import { useNavigate } from 'react-router-dom';
-import useSetLocalStorage from '../hooks/useSetLocalStorage';
-import { LoginType } from '../global/types/auth/auth.types';
-import { loginSchema } from '../utils/schema/authSchema';
 import ButtonLoader from '../global/loader/button/ButtonLoader';
+import { LoginType } from '../global/types/auth/auth.types';
+import useSetLocalStorage from '../hooks/useSetLocalStorage';
+import { auth } from '../utils/api/apiurls';
+import axiosInstance from '../utils/api/axiosInstance';
+import { loginSchema } from '../utils/schema/authSchema';
 
 
 export default function Login() {
@@ -25,18 +25,17 @@ export default function Login() {
   const { errors } = formState;
 
   const submitHandler = async (data: LoginType) => {
-    console.log('submitted')
     setLoading(true)
     try {
       const req = await axiosInstance.post(auth.loginApi, {email: data.email, password: data.password});
 
       if (req.status >= 200 && req.status <= 300) {
         const { estatus, message } = req.data;
-        console.log(req.data)
 
         if (estatus) {
-          const { token } = req.data;
+          const { token, user_id } = req.data;
           setLS('token', token);
+          setLS('user_id', user_id);
           navigate('/');
           setLoading(false)
         } else {
@@ -89,7 +88,7 @@ export default function Login() {
 
           <button
             disabled={loading}
-            className='text-white max-w-1/2 w-full self-center flex items-center justify-center gap-2 rounded-md bg-slate-700 p-2'
+            className={`text-white max-w-1/2 w-full self-center flex items-center justify-center gap-2 rounded-md bg-slate-700 p-2 ${loading && 'opacity-50 cursor-not-allowed'}`}
           >
             Submit
             {

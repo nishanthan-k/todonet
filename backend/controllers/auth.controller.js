@@ -7,7 +7,7 @@ export const login = async (req, res) => {
 
   try {
     const q = `
-      SELECT password
+      SELECT user_id, password
       FROM users
       WHERE email = ($1)
       LIMIT 1;
@@ -34,7 +34,8 @@ export const login = async (req, res) => {
         return res.status(200).json({
           estatus: true,
           message: 'Login successful',
-          token: token
+          token: token,
+          user_id: result.rows[0].user_id,
         });
       }
     }

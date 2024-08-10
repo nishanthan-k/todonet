@@ -14,3 +14,8 @@ export const userAtom = atom({
   key: 'userAtom',
   default: ''
 })
+
+export const tokenAtom = atom({
+  key: 'tokenAtom',
+  default: ''
+})

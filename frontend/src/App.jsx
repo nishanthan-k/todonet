@@ -1,16 +1,18 @@
 import { useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
-import useGetLocalStorage from "./hooks/useGetLocalStorage";
-import { userAtom } from "./store/atoms/todo.atom";
-import { Routes, Route } from "react-router-dom";
-import ToDoScreen from "./screens/ToDoScreen";
+import useLocalStorage from "./hooks/useLocalStorage";
+import ProtectedRoute from "./routes/ProtectedRoute";
 import Login from "./screens/Login";
+import ToDoScreen from "./screens/ToDoScreen";
+import { userAtom } from "./store/atoms/todo.atom";
 
 function App() {
   const setUser = useSetRecoilState(userAtom);
+  const ls = useLocalStorage();
 
   useEffect(() => {
-    const userLS = useGetLocalStorage('user_id');
+    const userLS = ls.getItem('user_id');
     
     if (userLS) {
       setUser(userLS);
@@ -20,8 +22,11 @@ function App() {
   return (
     <main className="w-screen h-dvh bg-slate-800">
       <Routes>
-        <Route path="/" Component={ToDoScreen}/>
-        <Route path="/login" Component={Login}/>
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<ToDoScreen />}/>
+        </Route>
+
+        <Route path="/login" element={<Login />}/>
       </Routes>
     </main>
   );

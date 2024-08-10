@@ -1,5 +1,5 @@
 import axios from 'axios';
-import useGetLocalStorage from '../../hooks/useGetLocalStorage';
+import useLocalStorage from '../../hooks/useLocalStorage';
 
 const protocol = import.meta.env.VITE_SERVER_PROTOCOL;
 const host = import.meta.env.VITE_SERVER_HOST;
@@ -16,12 +16,17 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = useGetLocalStorage('token');
+    const ls = useLocalStorage();
+    const token = ls.getItem('token');
+    const user_id = ls.getItem('user_id');
     config.params = config.params || {};
-    config.params.user_id = 1;
     
     if (token) {
       config.params.token = token;
+    }
+
+    if (user_id) {
+      config.params.user_id = user_id;
     }
 
     return config;
