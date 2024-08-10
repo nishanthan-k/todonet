@@ -6,6 +6,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import Login from "./screens/Login";
 import ToDoScreen from "./screens/ToDoScreen";
 import { userAtom } from "./store/atoms/todo.atom";
+import Signup from "./screens/Signup";
 
 function App() {
   const setUser = useSetRecoilState(userAtom);
@@ -27,6 +28,7 @@ function App() {
         </Route>
 
         <Route path="/login" element={<Login />}/>
+        <Route path="/signup" element={<Signup />}/>
       </Routes>
     </main>
   );

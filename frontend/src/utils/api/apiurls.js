@@ -7,4 +7,5 @@ export const todo = {
 
 export const auth = {
   loginApi: '/api/auth/login',
+  signupApi: '/api/auth/signup',
 }

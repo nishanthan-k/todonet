@@ -10,7 +10,7 @@ import axiosInstance from '../utils/api/axiosInstance';
 import { loginSchema } from '../utils/schema/authSchema';
 
 
-export default function Login() {
+export default function Signup() {
   const [loading, setLoading] = useState(false);
   const setLS = useSetLocalStorage();
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ export default function Login() {
   const submitHandler = async (data: LoginType) => {
     setLoading(true)
     try {
-      const req = await axiosInstance.post(auth.loginApi, {email: data.email, password: data.password});
+      const req = await axiosInstance.post(auth.signupApi, {email: data.email, password: data.password});
 
       if (req.status >= 200 && req.status <= 300) {
         const { estatus, message } = req.data;
@@ -61,7 +61,7 @@ export default function Login() {
 
   return (
     <div className='w-full h-full flex flex-col justify-center items-center gap-8'>
-        <h2 className='text-3xl text-white font-medium'>Welcome back!</h2>
+        <h2 className='text-3xl text-white font-medium'>Join us!</h2>
         <form
           onSubmit={handleSubmit(submitHandler)}
           noValidate
@@ -94,11 +94,11 @@ export default function Login() {
               loading ? (
                 <ButtonLoader />
               ) : (
-                <span>LOGIN</span>
-              ) 
+                <span>REGISTER</span>
+              )
             }  
           </button>
-          <p className='text-white text-center'>Need an account? <Link className='text-blue-400 ml-2' to="/signup">Register</Link></p>
+          <p className='text-white text-center'>Already registered? <Link className='text-blue-400 ml-2' to="/login">Login</Link></p>
         </form>
     </div>
   )
