@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { connectDB } from "../config/db.js";
+import { decryptPassword, encryptPassword } from '../middlewares/auth.middleware.js';
 import { sendInternalError } from '../responses/sendInteralError.js';
 
 export const login = async (req, res) => {
@@ -24,7 +25,9 @@ export const login = async (req, res) => {
         message: 'User not found',
       })
     } else {
-      if (password !== result.rows[0].password) {
+      const isPassMatch = await decryptPassword(password, result.rows[0].password)
+      
+      if (!isPassMatch) {
         return res.status(200).json({
           estatus: false,
           message: 'Wrong password'
@@ -54,16 +57,17 @@ export const signup = async (req, res) => {
   const { email, password } = req.body;
   const client = await connectDB.connect();
 
-  console.log(email, password)
 
   try {
+    const hashedPassword = await encryptPassword(password);
+
     const q = `
       INSERT INTO users (email, password)
       VALUES ($1, $2)
-      RETURNING user_id
+      RETURNING user_id, password
     `;
 
-    const values = [email, password];
+    const values = [email, hashedPassword];
 
     const result = await client.query(q, values);
 
@@ -73,7 +77,8 @@ export const signup = async (req, res) => {
       estatus: true,
       message: 'User created successfully',
       user_id: result.rows[0].user_id,
-      token: token
+      token: token,
+      password: hashedPassword
     })
   } catch (error) {
     console.log(error)
