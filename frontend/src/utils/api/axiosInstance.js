@@ -3,16 +3,18 @@ import useLocalStorage from '../../hooks/useLocalStorage';
 
 const protocol = import.meta.env.VITE_SERVER_PROTOCOL;
 const host = import.meta.env.VITE_SERVER_HOST;
-const port = import.meta.env.VITE_SERVER_PORT;
+// Only include the port if it's defined and needed
+const port = import.meta.env.VITE_SERVER_PORT ? `:${import.meta.env.VITE_SERVER_PORT}` : '';
 
 const axiosInstance = axios.create({
-  baseURL: `${protocol}://${host}:${port}`,
+  baseURL: `${protocol}://${host}${port}`,
   headers: {
     'Content-Type': 'application/json',
     'Cache-Control': 'no-cache'
   },
   timeout: 10000,
 });
+
 
 axiosInstance.interceptors.request.use(
   (config) => {
