@@ -2,11 +2,12 @@
   "name": "tasknet",
   "version": "1.0.0",
   "description": "a todo app with react and express",
-  "main": "src/server.js",
+  "main": "backend/server.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "nodemon server.js"
+    "start": "node backend/server.js",
+    "server": "nodemon backend/server.js"
   },
   "keywords": [
     "nodejs",
