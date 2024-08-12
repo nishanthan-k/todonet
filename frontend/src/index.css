@@ -14,6 +14,12 @@
   .checkCircleHoverEffect:hover {
     transform: scale(1.2);
   }
+
+  .absoluteCenter {
+    top: 50%;
+    right: 0%;
+    transform: translate(-50%, -50%);
+  }
 }
 
 @layer utilities {
