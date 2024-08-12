@@ -8,10 +8,11 @@ import useSetLocalStorage from '../hooks/useSetLocalStorage';
 import { auth } from '../utils/api/apiurls';
 import axiosInstance from '../utils/api/axiosInstance';
 import { loginSchema } from '../utils/schema/authSchema';
-
+import { HiEye, HiEyeOff } from "react-icons/hi";
 
 export default function Signup() {
   const [loading, setLoading] = useState(false);
+  const [hidePassword, setHidePassword] = useState(true);
   const setLS = useSetLocalStorage();
   const navigate = useNavigate();
   const form = useForm({
@@ -77,12 +78,18 @@ export default function Signup() {
             {errors && errors.email && <span className='m-0 text-red-500'>{errors.email.message}</span>}
           </div>
 
-          <div className='flex flex-col gap-1'>
+          <div className='flex flex-col gap-1 relative'>
             <input
-              type="text"
+              type={hidePassword ? 'password' : 'text'}
               {...register("password", { required: "Password is required" })}
               className='rounded-md hover:ring-sky-400 hover:ring-2 focus:rounded-lg outline-none focus:ring-2 focus:ring-blue-400 px-2'
             />
+            <div
+              className='absolute absoluteCenter text-lg cursor-pointer'
+              onClick={() => setHidePassword(!hidePassword)}
+            >
+              {hidePassword ? <HiEyeOff /> : <HiEye />}
+            </div>
             {errors && errors.password && <span className='m-0 text-red-500'>{errors.password.message}</span>}
           </div>
 
